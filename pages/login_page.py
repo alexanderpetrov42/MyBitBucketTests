@@ -34,6 +34,12 @@ class LogInPage(PageBase):
         self.driver.find_element(*LoginPageLocators.password_text_field).send_keys("password")
         self.driver.find_element(*LoginPageLocators.submit_login_button).click()
 
+    @allure.step("Logging in to bitbucket with invalid data")
+    def login_invalid_data(self, driver):
+        self.driver.get("https://id.atlassian.com/login?application=bitbucket&amp;continue=https%3A%2F%2Fbitbucket.org%2Faccount%2Fsignin%2F%3FredirectCount%3D1%26next%3D%252F")
+        self.driver.find_element(*LoginPageLocators.user_text_field).send_keys("invalid_data@test.test")
+        self.driver.find_element(*LoginPageLocators.submit_user_button).click()
+
     @allure.step("Checking if we are logged in")
     def is_logged_in(self, user=None):
             return self.is_element_present(*LoginPageLocators.profile_button)

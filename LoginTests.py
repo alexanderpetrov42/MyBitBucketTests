@@ -24,7 +24,7 @@ class testSearch(unittest.TestCase):
         self.loginpage.open_page_and_search(self)
         assert "https://www.python.org/search/?q=getting+started+with+python&submit=" == self.driver.current_url
 
-    @allure.title("Home page - smoke test")
+    @allure.title("Home page - smoke test - positive")
     @allure.description("Check login with valid data")
     def test_login_with_valid_data_bitbucket(self):
         self.loginpage = LogInPage(self.driver)
@@ -37,6 +37,20 @@ class testSearch(unittest.TestCase):
                 allure.attach(body=self.driver.get_screenshot_as_png(),
                               name="screenshot_image")
                 raise AssertionError('We are not logged in')
+
+    @allure.title("Home page - smoke test - negative")
+    @allure.description("Check login with invalid data")
+    def test_login_with_invalid_data_bitbucket(self):
+        self.loginpage = LogInPage(self.driver)
+        self.loginpage.login_invalid_data(self)
+
+        with allure.step("Check if we are not logged in"):
+            try:
+                self.assertFalse(self.loginpage.is_logged_in());
+            except AssertionError as e:
+                allure.attach(body=self.driver.get_screenshot_as_png(),
+                              name="screenshot_image")
+                raise AssertionError('We are logged in')
 
     def create_bitbucket_repo(self):
         self.navpage = NavPage(self.driver)
